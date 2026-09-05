@@ -1,0 +1,359 @@
+{
+  "memories": [
+    {
+      "title": "Project Hyperion initially used PostgreSQL as its primary transactional store.",
+      "content": "Project Hyperion initially used PostgreSQL as its primary transactional store.\n\n---\n[Supporting data]\n- Edge Relation: USED_DATABASE\n- Source Entity: Project Hyperion\n- Target Entity: PostgreSQL\n- Valid At: 2026-04-01T09:30:00Z\n- Invalid At: 2026-04-15T11:00:00Z\n- Episodes: ep-101, ep-103",
+      "type": "relationship",
+      "tags": [
+        "graphiti",
+        "edge",
+        "used_database"
+      ],
+      "confidence": 0.95,
+      "source": "graphiti",
+      "source_ref": "edge-01",
+      "provenance": "imported",
+      "created_at": "2026-04-01 09:30:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00",
+      "expires_at": "2026-04-15 11:00:00+00:00"
+    },
+    {
+      "title": "Project Hyperion migrated primary persistence to CockroachDB for multi-region...",
+      "content": "Project Hyperion migrated primary persistence to CockroachDB for multi-region active-active ACID compliance.\n\n---\n[Supporting data]\n- Edge Relation: MIGRATED_TO_DATABASE\n- Source Entity: Project Hyperion\n- Target Entity: CockroachDB\n- Valid At: 2026-04-15T11:00:00Z\n- Episodes: ep-103, ep-104",
+      "type": "relationship",
+      "tags": [
+        "graphiti",
+        "edge",
+        "migrated_to_database"
+      ],
+      "confidence": 0.98,
+      "source": "graphiti",
+      "source_ref": "edge-02",
+      "provenance": "imported",
+      "created_at": "2026-04-15 11:00:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00",
+      "expires_at": null
+    },
+    {
+      "title": "Project Hyperion initially utilized Redis for session and response caching.",
+      "content": "Project Hyperion initially utilized Redis for session and response caching.\n\n---\n[Supporting data]\n- Edge Relation: USED_CACHE\n- Source Entity: Project Hyperion\n- Target Entity: Redis Cache\n- Valid At: 2026-04-01T09:30:00Z\n- Invalid At: 2026-04-08T14:15:00Z\n- Episodes: ep-101, ep-102",
+      "type": "relationship",
+      "tags": [
+        "graphiti",
+        "edge",
+        "used_cache"
+      ],
+      "confidence": 0.9,
+      "source": "graphiti",
+      "source_ref": "edge-03",
+      "provenance": "imported",
+      "created_at": "2026-04-01 09:30:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00",
+      "expires_at": "2026-04-08 14:15:00+00:00"
+    },
+    {
+      "title": "Project Hyperion adopted an In-Memory Raft Cache to eliminate Redis failover...",
+      "content": "Project Hyperion adopted an In-Memory Raft Cache to eliminate Redis failover race conditions.\n\n---\n[Supporting data]\n- Edge Relation: ADOPTED_CACHE\n- Source Entity: Project Hyperion\n- Target Entity: In-Memory Raft Cache\n- Valid At: 2026-04-08T14:15:00Z\n- Episodes: ep-102, ep-104",
+      "type": "fact",
+      "tags": [
+        "graphiti",
+        "edge",
+        "adopted_cache"
+      ],
+      "confidence": 0.95,
+      "source": "graphiti",
+      "source_ref": "edge-04",
+      "provenance": "imported",
+      "created_at": "2026-04-08 14:15:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00",
+      "expires_at": null
+    },
+    {
+      "title": "Engineering approved ADR-014: all internal microservices communicate via gRPC...",
+      "content": "Engineering approved ADR-014: all internal microservices communicate via gRPC with Protobuf contracts.\n\n---\n[Supporting data]\n- Edge Relation: DECIDED_PROTOCOL\n- Source Entity: Project Hyperion\n- Target Entity: gRPC Service Mesh\n- Valid At: 2026-04-08T14:15:00Z\n- Episodes: ep-102, ep-104",
+      "type": "decision",
+      "tags": [
+        "graphiti",
+        "edge",
+        "decided_protocol"
+      ],
+      "confidence": 0.99,
+      "source": "graphiti",
+      "source_ref": "edge-05",
+      "provenance": "imported",
+      "created_at": "2026-04-08 14:15:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00",
+      "expires_at": null
+    },
+    {
+      "title": "REST Gateway is retained exclusively for public ingress, terminating external...",
+      "content": "REST Gateway is retained exclusively for public ingress, terminating external HTTP requests before forwarding to gRPC mesh.\n\n---\n[Supporting data]\n- Edge Relation: USES_GATEWAY\n- Source Entity: Project Hyperion\n- Target Entity: REST Gateway\n- Valid At: 2026-04-08T14:15:00Z\n- Episodes: ep-102",
+      "type": "relationship",
+      "tags": [
+        "graphiti",
+        "edge",
+        "uses_gateway"
+      ],
+      "confidence": 0.92,
+      "source": "graphiti",
+      "source_ref": "edge-06",
+      "provenance": "imported",
+      "created_at": "2026-04-08 14:15:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00",
+      "expires_at": null
+    },
+    {
+      "title": "Team preference established: all internal inter-service traffic must strictly...",
+      "content": "Team preference established: all internal inter-service traffic must strictly enforce mutual TLS (mTLS).\n\n---\n[Supporting data]\n- Edge Relation: PREFERS_SECURITY_POLICY\n- Source Entity: Project Hyperion\n- Target Entity: Security & Auth Service\n- Valid At: 2026-04-15T11:00:00Z\n- Episodes: ep-103, ep-104",
+      "type": "preference",
+      "tags": [
+        "graphiti",
+        "edge",
+        "prefers_security_policy"
+      ],
+      "confidence": 0.96,
+      "source": "graphiti",
+      "source_ref": "edge-07",
+      "provenance": "imported",
+      "created_at": "2026-04-15 11:00:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00",
+      "expires_at": null
+    },
+    {
+      "title": "Team commitment: complete comprehensive chaos engineering and load testing by...",
+      "content": "Team commitment: complete comprehensive chaos engineering and load testing by Friday 5 PM before release.\n\n---\n[Supporting data]\n- Edge Relation: COMMITTED_TASK\n- Source Entity: Project Hyperion\n- Target Entity: Project Hyperion\n- Valid At: 2026-04-22T16:45:00Z\n- Episodes: ep-104",
+      "type": "fact",
+      "tags": [
+        "graphiti",
+        "edge",
+        "committed_task"
+      ],
+      "confidence": 0.93,
+      "source": "graphiti",
+      "source_ref": "edge-08",
+      "provenance": "imported",
+      "created_at": "2026-04-22 16:45:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00",
+      "expires_at": null
+    },
+    {
+      "title": "Team preference: Prometheus metrics and Grafana dashboards are required for s...",
+      "content": "Team preference: Prometheus metrics and Grafana dashboards are required for service health visualization.\n\n---\n[Supporting data]\n- Edge Relation: PREFERS_OBSERVABILITY\n- Source Entity: Project Hyperion\n- Target Entity: Project Hyperion\n- Valid At: 2026-04-22T16:45:00Z\n- Episodes: ep-104",
+      "type": "preference",
+      "tags": [
+        "graphiti",
+        "edge",
+        "prefers_observability"
+      ],
+      "confidence": 0.91,
+      "source": "graphiti",
+      "source_ref": "edge-09",
+      "provenance": "imported",
+      "created_at": "2026-04-22 16:45:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00",
+      "expires_at": null
+    },
+    {
+      "title": "CockroachDB",
+      "content": "CockroachDB: Distributed SQL database providing serializable ACID transactions and multi-region active-active replication.\n\n---\n[Supporting data]\n- Entity Labels: technology, database, distributedsystem\n- Node UUID: node-1",
+      "type": "fact",
+      "tags": [
+        "graphiti",
+        "entity",
+        "technology",
+        "database",
+        "distributedsystem"
+      ],
+      "confidence": 0.9,
+      "source": "graphiti",
+      "source_ref": "node-1",
+      "provenance": "imported",
+      "created_at": "2026-04-15 11:00:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00"
+    },
+    {
+      "title": "PostgreSQL",
+      "content": "PostgreSQL: Legacy single-primary relational database used during prototype and initial alpha stages.\n\n---\n[Supporting data]\n- Entity Labels: technology, database, legacy\n- Node UUID: node-2",
+      "type": "fact",
+      "tags": [
+        "graphiti",
+        "entity",
+        "technology",
+        "database",
+        "legacy"
+      ],
+      "confidence": 0.9,
+      "source": "graphiti",
+      "source_ref": "node-2",
+      "provenance": "imported",
+      "created_at": "2026-04-01 09:30:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00"
+    },
+    {
+      "title": "gRPC Service Mesh",
+      "content": "gRPC Service Mesh: High-performance RPC framework using HTTP/2 transport and Protocol Buffers for typed internal contracts.\n\n---\n[Supporting data]\n- Entity Labels: technology, networking, protocol\n- Node UUID: node-3",
+      "type": "fact",
+      "tags": [
+        "graphiti",
+        "entity",
+        "technology",
+        "networking",
+        "protocol"
+      ],
+      "confidence": 0.9,
+      "source": "graphiti",
+      "source_ref": "node-3",
+      "provenance": "imported",
+      "created_at": "2026-04-08 14:15:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00"
+    },
+    {
+      "title": "REST Gateway",
+      "content": "REST Gateway: External HTTP/JSON edge gateway handling third-party client ingress.\n\n---\n[Supporting data]\n- Entity Labels: technology, gateway, api\n- Node UUID: node-4",
+      "type": "fact",
+      "tags": [
+        "graphiti",
+        "entity",
+        "technology",
+        "gateway",
+        "api"
+      ],
+      "confidence": 0.9,
+      "source": "graphiti",
+      "source_ref": "node-4",
+      "provenance": "imported",
+      "created_at": "2026-04-01 09:30:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00"
+    },
+    {
+      "title": "In-Memory Raft Cache",
+      "content": "In-Memory Raft Cache: Consistent distributed in-memory cache synchronized via Raft consensus, replacing Redis.\n\n---\n[Supporting data]\n- Entity Labels: technology, cache, distributedsystem\n- Node UUID: node-5",
+      "type": "fact",
+      "tags": [
+        "graphiti",
+        "entity",
+        "technology",
+        "cache",
+        "distributedsystem"
+      ],
+      "confidence": 0.9,
+      "source": "graphiti",
+      "source_ref": "node-5",
+      "provenance": "imported",
+      "created_at": "2026-04-08 14:15:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00"
+    },
+    {
+      "title": "Redis Cache",
+      "content": "Redis Cache: Deprecated caching layer removed due to cluster failover split-brain synchronization anomalies.\n\n---\n[Supporting data]\n- Entity Labels: technology, cache, deprecated\n- Node UUID: node-6",
+      "type": "fact",
+      "tags": [
+        "graphiti",
+        "entity",
+        "technology",
+        "cache",
+        "deprecated"
+      ],
+      "confidence": 0.9,
+      "source": "graphiti",
+      "source_ref": "node-6",
+      "provenance": "imported",
+      "created_at": "2026-04-01 09:30:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00"
+    },
+    {
+      "title": "Project Hyperion",
+      "content": "Project Hyperion: Next-generation distributed agent orchestration and processing platform.\n\n---\n[Supporting data]\n- Entity Labels: project, coreplatform\n- Node UUID: node-7",
+      "type": "fact",
+      "tags": [
+        "graphiti",
+        "entity",
+        "project",
+        "coreplatform"
+      ],
+      "confidence": 0.9,
+      "source": "graphiti",
+      "source_ref": "node-7",
+      "provenance": "imported",
+      "created_at": "2026-04-01 09:00:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00"
+    },
+    {
+      "title": "Security & Auth Service",
+      "content": "Security & Auth Service: Zero-trust internal identity service managing mTLS certificates and SPIFFE identities.\n\n---\n[Supporting data]\n- Entity Labels: security, infrastructure\n- Node UUID: node-8",
+      "type": "fact",
+      "tags": [
+        "graphiti",
+        "entity",
+        "security",
+        "infrastructure"
+      ],
+      "confidence": 0.9,
+      "source": "graphiti",
+      "source_ref": "node-8",
+      "provenance": "imported",
+      "created_at": "2026-04-15 11:00:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00"
+    },
+    {
+      "title": "Episode 1: Initial Architecture Kickoff",
+      "content": "Kickoff meeting for Project Hyperion. We decided to build a monolithic REST API using PostgreSQL for persistence and Redis for session and response caching.\n\n---\n[Supporting data]\n- Episode Source: slack_sync\n- Episode UUID: ep-101",
+      "type": "event",
+      "tags": [
+        "graphiti",
+        "episode"
+      ],
+      "confidence": 0.8,
+      "source": "graphiti",
+      "source_ref": "ep-101",
+      "provenance": "imported",
+      "created_at": "2026-04-01 09:30:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00"
+    },
+    {
+      "title": "Episode 2: Protocol Scaling & Cache Race Issues",
+      "content": "P99 latency spiked past 600ms on REST endpoints under peak load. We approved ADR-014: migrating all inter-service communications to gRPC with protobuf schemas. Furthermore, Redis cache showed split-brain race conditions under cluster failover; decided to deprecate Redis in favor of an In-Memory Raft-synchronized cache layer.\n\n---\n[Supporting data]\n- Episode Source: meeting_transcript\n- Episode UUID: ep-102",
+      "type": "event",
+      "tags": [
+        "graphiti",
+        "episode"
+      ],
+      "confidence": 0.8,
+      "source": "graphiti",
+      "source_ref": "ep-102",
+      "provenance": "imported",
+      "created_at": "2026-04-08 14:15:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00"
+    },
+    {
+      "title": "Episode 3: Multi-Region Compliance & Active-Active DB",
+      "content": "EU GDPR and latency requirements mandate multi-region active-active writes. PostgreSQL single-primary topology cannot satisfy this SLA. We officially invalidated the PostgreSQL architecture and migrated the primary transactional datastore to CockroachDB. Established strict team preference: all new microservices must enforce mutual TLS (mTLS).\n\n---\n[Supporting data]\n- Episode Source: architecture_review\n- Episode UUID: ep-103",
+      "type": "event",
+      "tags": [
+        "graphiti",
+        "episode"
+      ],
+      "confidence": 0.8,
+      "source": "graphiti",
+      "source_ref": "ep-103",
+      "provenance": "imported",
+      "created_at": "2026-04-15 11:00:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00"
+    },
+    {
+      "title": "Episode 4: Production Launch Readiness",
+      "content": "Final pre-production sprint. Commitment made: complete comprehensive chaos engineering and load testing by Friday at 5 PM. Verified that gRPC endpoints achieve p95 latency of 38ms. The team prefers Prometheus and Grafana for all observability dashboards.\n\n---\n[Supporting data]\n- Episode Source: standup_notes\n- Episode UUID: ep-104",
+      "type": "event",
+      "tags": [
+        "graphiti",
+        "episode"
+      ],
+      "confidence": 0.8,
+      "source": "graphiti",
+      "source_ref": "ep-104",
+      "provenance": "imported",
+      "created_at": "2026-04-22 16:45:00+00:00",
+      "updated_at": "2026-09-05 02:42:42.168590+00:00"
+    }
+  ]
+}

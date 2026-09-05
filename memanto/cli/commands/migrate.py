@@ -648,6 +648,98 @@ def migrate_okf(
     )
 
 
+@migrate_app.command("graphiti")
+def migrate_graphiti(
+    file: Path = typer.Option(
+        ...,
+        "--file",
+        "-f",
+        help="Path to Graphiti/Zep export JSON file.",
+    ),
+    agent: str | None = typer.Option(
+        None,
+        "--agent",
+        "-a",
+        help="Target Memanto agent id (defaults to active agent).",
+    ),
+    dry_run: bool = typer.Option(
+        False,
+        "--dry-run",
+        help="Preview the mapping without writing to Memanto.",
+    ),
+):
+    """Migrate a Zep/Graphiti temporal knowledge graph into the active Memanto agent.
+
+    Maps Graphiti nodes (entities), temporal edges (relationships, decisions, facts),
+    and episodes (events) into Memanto's typed memory primitives with temporal validity.
+
+    Examples:
+        memanto migrate graphiti --file ./graphiti_export.json --dry-run
+        memanto migrate graphiti --file ./graphiti_export.json --agent my-agent
+    """
+    if not file.exists():
+        _error(f"Graphiti export file not found: {file}")
+
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+    run_dir = config_manager.get_migrate_dir("graphiti") / stamp
+    run_dir.mkdir(parents=True, exist_ok=True)
+
+    mode = "Dry run" if dry_run else "Migrate"
+    console.print(
+        Panel.fit(
+            f"[{BOLD_PRIMARY}]Zep/Graphiti -> Memanto  {mode}[/{BOLD_PRIMARY}]\n"
+            "[dim]Mapping temporal knowledge graph into Memanto typed semantic memory[/dim]",
+            border_style=PRIMARY,
+        )
+    )
+
+    def progress(msg: str) -> None:
+        console.print(f"  [{BRIGHT}]…[/{BRIGHT}] {msg}")
+
+    target_agent = None if dry_run else _resolve_target_agent(agent)
+    progress(f"Loading Graphiti export from {file}")
+    try:
+        export = load_export(file)
+    except Exception as exc:
+        _error(f"Failed to load Graphiti export: {exc}")
+
+    progress("Mapping Graphiti nodes, edges, and episodes...")
+    client = None if dry_run else get_client()
+    summary, rows = run_migration(
+        provider="graphiti",
+        export=export,
+        client=client,
+        agent_id=target_agent or "",
+        dry_run=dry_run,
+        on_progress=progress,
+    )
+
+    preview_path = write_preview(rows, run_dir / "mapped_preview.json")
+    type_lines = ", ".join(f"{k}: {v}" for k, v in sorted(summary.type_counts.items())) or "—"
+    body_lines = [
+        f"[dim]Graphiti elements:[/dim] {summary.source_count}",
+        f"[dim]Mapped memories:[/dim] {summary.mapped_count}  [dim](skipped {summary.skipped})[/dim]",
+        f"[dim]Type breakdown:[/dim] {type_lines}",
+    ]
+    if dry_run:
+        body_lines.extend(["", "[yellow]Dry run — no writes performed.[/yellow]"])
+    else:
+        body_lines.extend([
+            f"[dim]Imported:[/dim] {summary.imported}  [dim]Failed:[/dim] {summary.failed}  [dim]Batches:[/dim] {summary.batches}",
+            f"[dim]Target agent:[/dim] {target_agent}",
+        ])
+    body_lines.extend([
+        "",
+        f"[dim]Run dir:[/dim] {run_dir}",
+        f"[dim]Mapped preview:[/dim] {preview_path}",
+    ])
+    border = WARNING if summary.failed else SUCCESS
+    console.print()
+    console.print(
+        Panel("\n".join(body_lines), title="[bold yellow]Dry run complete[/bold yellow]" if dry_run else "[bold green]Migration complete[/bold green]", border_style=border)
+    )
+
+
 @migrate_app.command("supermemory")
 def migrate_supermemory(
     api_key: str | None = typer.Option(

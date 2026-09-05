@@ -252,6 +252,8 @@ def source_count(provider: str, export: dict[str, Any]) -> int:
     """Best-effort count of source records (for the summary header)."""
     if provider == "letta":
         return len(export.get("passages", []) or [])
+    if provider == "graphiti":
+        return len(export.get("nodes", []) or []) + len(export.get("edges", []) or []) + len(export.get("episodes", []) or [])
     if provider == "langfuse":
         # Observations, not memories — many collapse into one signature.
         return len(export.get("observations", []) or [])

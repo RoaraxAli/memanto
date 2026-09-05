@@ -568,6 +568,102 @@ def map_okf(export: dict[str, Any]) -> list[dict[str, Any]]:
     return rows
 
 
+# --------------------------------------------------------------------------
+# Graphiti / Zep Temporal Knowledge Graph
+# --------------------------------------------------------------------------
+
+
+def map_graphiti(export: dict[str, Any]) -> list[dict[str, Any]]:
+    """Map Zep / Graphiti temporal knowledge graph export to Memanto memory payloads."""
+    rows: list[dict[str, Any]] = []
+    migrated_at = _now_utc()
+    node_names = {n.get("uuid") or n.get("id"): n.get("name") for n in (export.get("nodes") or []) if n.get("name")}
+
+    # 1. Edges: temporal facts, relationships, and decisions
+    for edge in export.get("edges") or []:
+        fact = (edge.get("fact") or "").strip()
+        rel = (edge.get("name") or edge.get("relation") or "relates_to").strip()
+        src = node_names.get(edge.get("source_node_uuid") or edge.get("source"), edge.get("source"))
+        tgt = node_names.get(edge.get("target_node_uuid") or edge.get("target"), edge.get("target"))
+        content = fact or f"{src} {rel} {tgt}."
+
+        rel_lower = rel.lower()
+        if "prefer" in rel_lower:
+            mtype = "preference"
+        elif "decid" in rel_lower:
+            mtype = "decision"
+        elif any(k in rel_lower for k in ("use", "depend", "connect", "integrat", "part_of", "migrat")):
+            mtype = "relationship"
+        else:
+            mtype = "fact"
+
+        created_at = _parse_dt(edge.get("valid_at") or edge.get("created_at"))
+        expires_at = _parse_dt(edge.get("invalid_at"))
+        footer = _format_supporting_data([
+            ("Edge Relation", rel),
+            ("Source Entity", src),
+            ("Target Entity", tgt),
+            ("Valid At", edge.get("valid_at")),
+            ("Invalid At", edge.get("invalid_at")),
+            ("Episodes", edge.get("episodes")),
+        ])
+        rows.append({
+            "title": _title_from(content),
+            "content": _attach_footer(content, footer),
+            "type": mtype,
+            "tags": list(filter(None, ["graphiti", "edge", rel_lower, *(edge.get("tags") or [])])),
+            "confidence": float(edge.get("weight") or 0.85),
+            "source": "graphiti",
+            "source_ref": str(edge.get("uuid") or edge.get("id") or ""),
+            "provenance": "imported",
+            "created_at": created_at,
+            "updated_at": migrated_at,
+            "expires_at": expires_at,
+        })
+
+    # 2. Nodes: entity context and attributes
+    for node in export.get("nodes") or []:
+        name = (node.get("name") or "").strip()
+        summary = (node.get("summary") or "").strip()
+        content = f"{name}: {summary}" if summary else name
+        labels = [str(l).lower() for l in (node.get("labels") or [])]
+        footer = _format_supporting_data([("Entity Labels", labels), ("Node UUID", node.get("uuid") or node.get("id"))])
+        rows.append({
+            "title": name[:_MAX_TITLE_CHARS],
+            "content": _attach_footer(content, footer),
+            "type": "fact",
+            "tags": ["graphiti", "entity", *labels],
+            "confidence": 0.9,
+            "source": "graphiti",
+            "source_ref": str(node.get("uuid") or node.get("id") or ""),
+            "provenance": "imported",
+            "created_at": _parse_dt(node.get("created_at")),
+            "updated_at": migrated_at,
+        })
+
+    # 3. Episodes: interaction session events
+    for ep in export.get("episodes") or []:
+        content = (ep.get("content") or "").strip()
+        if not content:
+            continue
+        title = ep.get("name") or ep.get("source_description") or _title_from(content)
+        footer = _format_supporting_data([("Episode Source", ep.get("source")), ("Episode UUID", ep.get("uuid") or ep.get("id"))])
+        rows.append({
+            "title": title[:_MAX_TITLE_CHARS],
+            "content": _attach_footer(content, footer),
+            "type": "event",
+            "tags": ["graphiti", "episode"],
+            "confidence": 0.8,
+            "source": "graphiti",
+            "source_ref": str(ep.get("uuid") or ep.get("id") or ""),
+            "provenance": "imported",
+            "created_at": _parse_dt(ep.get("created_at")),
+            "updated_at": migrated_at,
+        })
+
+    return rows
+
+
 # Langfuse is deliberately absent: its rows are observability events, not
 # memories, so one incident collapses into a single grouped payload rather
 # than mapping row-for-row. That needs the user's capture settings, which
@@ -577,6 +673,7 @@ MAPPERS: dict[str, Callable[[dict[str, Any]], list[dict[str, Any]]]] = {
     "letta": map_letta,
     "supermemory": map_supermemory,
     "okf": map_okf,
+    "graphiti": map_graphiti,
 }
 
 
